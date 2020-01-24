@@ -15,6 +15,6 @@ def comment():
     for submission in subreddit.hot(limit = 10):
         if (submission.title == "Black Positivity Bot Test Thread"):
             print("Bot commenting hello world.")
-            submission.reply("Hello World!")
+            submission.reply("Hello Ashken!")
 
 comment()

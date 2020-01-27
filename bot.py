@@ -9,12 +9,26 @@ reddit = praw.Reddit(client_id= '',
 #subreddit where bot lives
 subreddit = reddit.subreddit('ObsidianTech')
 
-#respond to test thread with "hello world"
-def comment():
+#keyphrase to activate bot
+keyphrase = '!bpb'
 
+#respond to test thread with "Hello World"
+def comment():
     for submission in subreddit.hot(limit = 10):
         if (submission.title == "Black Positivity Bot Test Thread"):
-            print("Bot commenting hello world.")
-            submission.reply("Hello Ashken!")
+            submission.reply("Hello World!")
+            print("Bot commenting Hello World!")
 
-comment()
+#search for keyphrase and respond with "Hello!"
+def callbot():
+    for comment in subreddit.stream.comments():
+        try:
+            if keyphrase in comment.body and not comment.saved :
+                comment.reply("Hello!")
+                comment.save()
+                print("Bot responding to keyphrase with Hello!")
+        except praw.exceptions.APIException:
+            pass
+
+
+callbot()

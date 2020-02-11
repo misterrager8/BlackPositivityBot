@@ -1,16 +1,15 @@
 import praw
+import json
+import requests
 
 reddit = praw.Reddit(client_id= '',
                      client_secret= '',
                      username = '',
                      password = '',
-                     user_agent = 'Black Positivity Bot')
+                     user_agent = '')
 
 #subreddit where bot lives
 subreddit = reddit.subreddit('ObsidianTech')
-
-#keyphrase to activate bot
-keyphrase = '!bpb'
 
 #respond to specified thread with comment
 def comment():
@@ -22,7 +21,8 @@ def comment():
             print('Bot commenting', comment_text)
 
 #search for keyphrase and respond to comment
-def callbot():
+def call_bot():
+    keyphrase = '!bpb'
     comment_text = 'Hello!'
     for comment in subreddit.stream.comments():
         try:
@@ -40,4 +40,11 @@ def post_thread():
     subreddit.submit(title, selftext=post_content)
     print('"'+ title + '" submission created')
 
-post_thread()
+#make http request
+def http_call():
+    url = "http://blackpositivityquotes.tk/api/Quotes/random"
+    r = requests.get(url)
+    data = json.loads(r.text)
+    print(json.dumps(data, indent=2))
+
+http_call()

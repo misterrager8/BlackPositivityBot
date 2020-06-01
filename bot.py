@@ -1,17 +1,20 @@
-import praw
+import datetime
 import json
+
+import praw
 import requests
 
-reddit = praw.Reddit(client_id= '',
-                     client_secret= '',
-                     username = '',
-                     password = '',
-                     user_agent = 'Black Positivity Bot')
+reddit = praw.Reddit(client_id='',
+                     client_secret='',
+                     username='',
+                     password='',
+                     user_agent='Black Positivity Bot')
 
-#subreddit where bot lives
-subreddit = reddit.subreddit('ObsidianTech')
+# subreddit where bot lives
+subreddit = reddit.subreddit('Blackfellas')
 
-#http call to API, return random quote and its contributor
+
+# http call to API, return random quote and its contributor
 def quote():
     url = "http://blackpositivityquotes.tk/api/Quotes/random"
     req = requests.get(url)
@@ -23,41 +26,61 @@ def quote():
 
     return '"{}", {}'.format(quote_text, contributor)
 
-#respond to specified thread with comment
+
+# respond to specified thread with comment
 def comment():
     submission_title = 'Black Positivity Bot Test Thread'
     comment_text = 'Hello World!'
-    for submission in subreddit.hot(limit = 10):
-        if (submission.title == submission_title):
+    for submission in subreddit.hot(limit=10):
+        if submission.title == submission_title:
             submission.reply(comment_text)
             print('Bot commenting', comment_text)
 
-#create a thread in subreddit
+
+# create a thread in subreddit
 def post_thread():
-    title = 'Bot Posted Test Thread'
-    post_content = 'Black Positivity Bot test'
+    right_now = datetime.datetime.now()
+    title = "Daily Wisdom " + right_now.strftime("%m-%d-%Y") + " : " + quote()
+    post_content = "Happy " + right_now.strftime("%A") + ", fellas!"
     subreddit.submit(title, selftext=post_content)
     print('"{}" submission created'.format(title))
 
-#keyphrases and bot responses
-keyphrases = {'!bpb':'Hello!', '!inspire':quote}
 
-#search for keyphrase and respond to comment
+# returns list of subs user has commented in
+def get_user_subs(username):
+    user = reddit.redditor(username)
+    unique_subs = []
+
+    for comms in user.comments.new():
+        if comms.subreddit.display_name not in unique_subs:
+            unique_subs.append(comms.subreddit.display_name)
+
+    return unique_subs
+
+
+# keyphrases and bot responses
+keyphrases = {'!bpb': 'Need some advice?', '!inspire': quote, '!uplift': quote, '!motivate': quote,
+              'love y\'all': quote}
+
+
+# search for keyphrase and respond to comment
 def call_bot():
-    for comment in subreddit.stream.comments():
+    for new_comment in subreddit.stream.comments():
         for phrase in keyphrases:
             try:
-                if phrase in comment.body and not comment.saved :
+                if phrase in new_comment.body and not new_comment.saved:
                     if callable(keyphrases[phrase]):
                         comment_text = keyphrases[phrase]()
-                        comment.reply(comment_text)
+                        new_comment.reply(comment_text)
                     else:
                         comment_text = keyphrases[phrase]
-                        comment.reply(comment_text)
-                    comment.save()
+                        new_comment.reply(comment_text)
+                    new_comment.save()
                     print('Bot responding to', phrase, 'with:', comment_text)
             except praw.exceptions.APIException as error:
                 print(error)
                 pass
 
-call_bot()
+
+if __name__ == "__main__":
+    call_bot()

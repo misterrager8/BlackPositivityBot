@@ -42,8 +42,8 @@ def comment():
 # create a thread in subreddit
 def post_thread():
     right_now = datetime.datetime.now()
-    title = "Daily Wisdom " + right_now.strftime("%m-%d-%Y") + " : " + quote()
-    post_content = "Happy " + right_now.strftime("%A") + ", fellas!"
+    title = "Black Positivity Quote - " + right_now.strftime("%m/%d/%Y")
+    post_content = quote() + "\n\nHappy " + right_now.strftime("%A") + ", fellas!"
     subreddit.submit(title, selftext=post_content)
     print('"{}" submission created'.format(title))
 
@@ -101,3 +101,7 @@ def call_bot():
 
 if __name__ == "__main__":
     call_bot()
+    # get_account_karma("")
+    # get_account_age("")
+    # get_user_subs("")
+    # post_thread()

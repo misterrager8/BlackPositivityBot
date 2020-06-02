@@ -1,6 +1,8 @@
+# coding=utf-8
 import datetime
 import json
 
+import arrow
 import praw
 import requests
 
@@ -56,6 +58,21 @@ def get_user_subs(username):
             unique_subs.append(comms.subreddit.display_name)
 
     return unique_subs
+
+
+# returns date the account was created
+def get_account_age(username):
+    user = reddit.redditor(username)
+    utc = arrow.Arrow.fromtimestamp(user.created_utc)
+    date_formatted = utc.to('America/New_York').format("MMM D, YYYY")
+
+    return date_formatted
+
+
+# returns the user's karma score
+def get_account_karma(username):
+    user = reddit.redditor(username)
+    return user.comment_karma
 
 
 # keyphrases and bot responses

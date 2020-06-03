@@ -6,19 +6,18 @@ import arrow
 import praw
 import requests
 
-reddit = praw.Reddit(client_id='',
-                     client_secret='',
-                     username='',
-                     password='',
-                     user_agent='Black Positivity Bot')
+reddit = praw.Reddit()
 
 # subreddit where bot lives
-subreddit = reddit.subreddit('Blackfellas')
+subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
+
+# env check
+print("Where am I? " + subreddit.display_name)
 
 
 # http call to API, return random quote and its contributor
 def quote():
-    url = "http://blackpositivityquotes.tk/api/Quotes/random"
+    url = "http://blackpositivityquotes.tk/api/Quotes/fresh"
     req = requests.get(url)
     data = json.loads(req.text)
     quote_text = data["quote"].strip()
@@ -101,7 +100,7 @@ def call_bot():
 
 if __name__ == "__main__":
     call_bot()
-    # get_account_karma("")
-    # get_account_age("")
-    # get_user_subs("")
+    # print(get_account_karma(""))
+    # print(get_account_age(""))
+    # print(get_user_subs(""))
     # post_thread()

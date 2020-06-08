@@ -21,6 +21,7 @@ subreddit = reddit.subreddit(currentSub())
 
 # env check
 print("Where am I? " + subreddit.display_name)
+sys.stdout.flush()
 
 # http call to API, return random quote and its contributor
 def quote():
@@ -43,6 +44,7 @@ def comment():
         if submission.title == submission_title:
             submission.reply(comment_text)
             print('Bot commenting', comment_text)
+            sys.stdout.flush()
 
 
 # create a thread in subreddit
@@ -52,6 +54,7 @@ def post_thread():
     post_content = quote() + "\n\nHappy " + right_now.strftime("%A") + ", fellas!"
     subreddit.submit(title, selftext=post_content)
     print('"{}" submission created'.format(title))
+    sys.stdout.flush()
 
 
 # returns list of subs user has commented in
@@ -100,8 +103,10 @@ def call_bot():
                         new_comment.reply(comment_text)
                     new_comment.save()
                     print('Bot responding to', phrase, 'with:', comment_text)
+                    sys.stdout.flush()
             except praw.exceptions.APIException as error:
                 print(error)
+                sys.stdout.flush()
                 pass
 
 

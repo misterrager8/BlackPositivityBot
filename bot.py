@@ -12,7 +12,7 @@ reddit = praw.Reddit()
 
 def currentSub():
     currentEnv = os.getenv("env")
-    if currentEnv == "prod:":
+    if currentEnv == "prod":
         return "BlackFellas"
     else:
         return "ObsidianTech"

@@ -14,4 +14,4 @@ echo $_clientSecret
 
 pip install -r requirements.txt
 
-praw_username=$_username praw_user_agent=$_userAgent praw_password=$_password praw_client_secret=$_clientSecret praw_client_id=$_clientId env=$_env
+praw_username=$_username praw_user_agent=$_userAgent praw_password=$_password praw_client_secret=$_clientSecret praw_client_id=$_clientId env=$_env python bot.py

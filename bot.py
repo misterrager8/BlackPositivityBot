@@ -1,4 +1,5 @@
 # coding=utf-8
+import os
 import datetime
 import json
 
@@ -8,12 +9,18 @@ import requests
 
 reddit = praw.Reddit()
 
+def currentSub():
+    currentEnv = os.getenv("env")
+    if currentEnv == "prod:":
+        return "BlackFellas"
+    else:
+        return "ObsidianTech"
+
 # subreddit where bot lives
-subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
+subreddit = reddit.subreddit(currentSub())
 
 # env check
 print("Where am I? " + subreddit.display_name)
-
 
 # http call to API, return random quote and its contributor
 def quote():

@@ -8,11 +8,18 @@ import arrow
 import praw
 import requests
 
-reddit = praw.Reddit()
+if os.environ['env'] == "prod":
+    reddit = praw.Reddit(client_id= os.environ['client_id'],
+                     client_secret= os.environ['client_secret'],
+                     username = os.environ['username'],
+                     password = os.environ['password'],
+                     user_agent = 'Black Positivity Bot')
+else:
+    reddit = praw.Reddit()
+
 
 def currentSub():
-    currentEnv = os.getenv("env")
-    if currentEnv == "prod":
+    if os.environ['env'] == "prod":
         return "BlackFellas"
     else:
         return "ObsidianTech"

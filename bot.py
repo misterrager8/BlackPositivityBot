@@ -34,8 +34,7 @@ sys.stdout.flush()
 # http call to API, return random quote and its contributor
 def quote():
     url = "http://blackpositivityquotes.tk/api/Quotes/fresh"
-    req = requests.get(url)
-    data = json.loads(req.text)
+    data = requests.get(url).json()
     quote_text = data["quote"].strip()
     if quote_text.startswith('“'):
         quote_text = quote_text[1:-1]

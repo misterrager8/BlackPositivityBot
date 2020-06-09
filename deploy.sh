@@ -22,6 +22,6 @@ docker build \
 --build-arg clientSecret=$_clientSecret \
 --no-cache -t "$_imagetag" .
 
-heroku container:push web
+heroku container:push web -a black-positivity-bot
 
-heroku container:release web
+heroku container:release web -a black-positivity-bot

@@ -1,4 +1,6 @@
 # coding=utf-8
+import os
+import sys
 import datetime
 import json
 
@@ -6,20 +8,33 @@ import arrow
 import praw
 import requests
 
-reddit = praw.Reddit()
+if os.environ['env'] == "prod":
+    reddit = praw.Reddit(client_id= os.environ['client_id'],
+                     client_secret= os.environ['client_secret'],
+                     username = os.environ['username'],
+                     password = os.environ['password'],
+                     user_agent = 'Black Positivity Bot')
+else:
+    reddit = praw.Reddit()
+
+
+def currentSub():
+    if os.environ['env'] == "prod":
+        return "BlackFellas"
+    else:
+        return "ObsidianTech"
 
 # subreddit where bot lives
-subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
+subreddit = reddit.subreddit(currentSub())
 
 # env check
 print("Where am I? " + subreddit.display_name)
-
+sys.stdout.flush()
 
 # http call to API, return random quote and its contributor
 def quote():
     url = "http://blackpositivityquotes.tk/api/Quotes/fresh"
-    req = requests.get(url)
-    data = json.loads(req.text)
+    data = requests.get(url).json()
     quote_text = data["quote"].strip()
     if quote_text.startswith('“'):
         quote_text = quote_text[1:-1]
@@ -36,6 +51,7 @@ def comment():
         if submission.title == submission_title:
             submission.reply(comment_text)
             print('Bot commenting', comment_text)
+            sys.stdout.flush()
 
 
 # create a thread in subreddit
@@ -45,6 +61,7 @@ def post_thread():
     post_content = quote() + "\n\nHappy " + right_now.strftime("%A") + ", fellas!"
     subreddit.submit(title, selftext=post_content)
     print('"{}" submission created'.format(title))
+    sys.stdout.flush()
 
 
 # returns list of subs user has commented in
@@ -93,8 +110,10 @@ def call_bot():
                         new_comment.reply(comment_text)
                     new_comment.save()
                     print('Bot responding to', phrase, 'with:', comment_text)
+                    sys.stdout.flush()
             except praw.exceptions.APIException as error:
                 print(error)
+                sys.stdout.flush()
                 pass
 
 

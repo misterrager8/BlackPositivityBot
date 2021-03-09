@@ -1,4 +1,2 @@
-arrow
-requests
-praw==6.5.1
-mysqlclient~=1.4.4
+praw
+mysqlclient

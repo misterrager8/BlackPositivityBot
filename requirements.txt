@@ -1,2 +1,5 @@
 praw
 mysqlclient
+python-dotenv
+SQLAlchemy
+Flask

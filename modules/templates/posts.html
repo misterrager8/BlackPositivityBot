@@ -4,5 +4,10 @@
 <title>Posts</title>
 <body>
 <h1 class="text-center">Posts</h1>
+{% for i in all_posts %}
+<a href="{{ i.url }}">
+  <p>{{ i.title }}</p>
+</a>
+{% endfor %}
 </body>
 {% endblock %}

@@ -84,4 +84,14 @@ class Quote(db.Model):
               self.has_been_used)
 
 
+class Post(db.Model):
+    __tablename__ = "gbn_posts"
+
+    id = Column(Integer, primary_key=True)
+
+    def __init__(self, title: str, url: str):
+        self.title = title
+        self.url = url
+
+
 db.create_all()

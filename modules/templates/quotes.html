@@ -5,10 +5,12 @@
 <body>
 <h1 class="text-center">Quotes</h1>
 
-<form class="form-inline">
+<form class="form-inline" action="{{ url_for('quotes') }}" method="post">
   <div class="input-group mb-2 mr-sm-2 w-100">
-    <input type="text" class="form-control mb-2 mr-sm-2 w-50" id="inlineFormInputName2" placeholder="Text">
-    <input type="text" class="form-control mr-sm-2" id="inlineFormInputGroupUsername2" placeholder="Author">
+    <input type="text" class="form-control mb-2 mr-sm-2 w-50" id="inlineFormInputName2" placeholder="Text"
+           name="quote_text">
+    <input type="text" class="form-control mr-sm-2" id="inlineFormInputGroupUsername2" placeholder="Author"
+           name="author">
     <button type="submit" class="btn btn-primary mb-2">Submit</button>
   </div>
 </form>

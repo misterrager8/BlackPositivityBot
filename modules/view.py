@@ -1,12 +1,11 @@
 import random
 
 import praw
-from flask import Flask, render_template
+from flask import render_template, request
 
 from modules.db import QuoteDB
-from modules.model import Post
+from modules.model import Post, Quote, app
 
-app = Flask(__name__)
 reddit = praw.Reddit("bot1")
 
 all_quotes = QuoteDB().get_all()
@@ -23,8 +22,15 @@ def index():
     return render_template("index.html", quote=random_quote)
 
 
-@app.route("/quotes")
+@app.route("/quotes", methods=["POST", "GET"])
 def quotes():
+    if request.method == "POST":
+        quote_text = request.form["quote_text"]
+        author = request.form["author"]
+
+        b = Quote(quote_text, author)
+        b.add()
+
     return render_template("quotes.html", all_quotes=all_quotes)
 
 

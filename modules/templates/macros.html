@@ -1,0 +1,60 @@
+{% macro title_div(txt) %}
+<p class="display-4 text-center m-5">{{ txt }}</p>
+{% endmacro %}
+
+{% macro search_icon() %}
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
+{% endmacro %}
+
+{% macro add_icon() %}
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</svg>
+{% endmacro %}
+
+{% macro quote_list_item(quote) %}
+<div class="list-group-item list-group-item-action border-0">
+  <p class="font-italic">{{ quote.quote_text }}</p>
+  <div class="d-flex justify-content-between">
+    <span class="font-weight-bold">{{ quote.author }}</span>
+    <small>
+      <a class="text-danger" style="text-decoration:none" href="" data-toggle="modal" data-target="#delete-{{ quote.id }}">Delete</a>
+    </small>
+  </div>
+</div>
+{{ delete_modal(quote) }}
+{% endmacro %}
+
+{% macro post_list_item(post) %}
+<div class="list-group-item list-group-item-action border-0">
+  <a style="text-decoration:none" class="text-body" href="{{ post.url }}">{{ post.title }}</a>
+</div>
+{% endmacro %}
+
+{% macro delete_modal(quote) %}
+<div class="modal" id="delete-{{ quote.id }}" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content p-1">
+      {{ title_div('Delete?') }}
+      <a href="{{ url_for('delete_quote', id_=quote.id) }}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro add_quote_form() %}
+<form class="form-inline border rounded p-2 m-2 shadow-sm" action="{{ url_for('add_quote') }}" method="POST">
+  <input type="text" class="form-control mr-2 flex-grow-1" placeholder="Quote" name="quote_text" autocomplete="off">
+  <input type="text" class="form-control mr-2 flex-grow-0" placeholder="Author" name="author" autocomplete="off">
+  <button type="submit" class="btn btn-success">{{ add_icon() }}</button>
+</form>
+{% endmacro %}
+
+{% macro search_quote_form() %}
+<form class="form-inline border rounded p-2 m-2 shadow-sm" action="{{ url_for('search_quotes') }}" method="POST">
+  <input type="text" class="form-control mr-2 flex-grow-1" placeholder="Search" name="search_term" autocomplete="off">
+  <button type="submit" class="btn btn-secondary">{{ search_icon() }}</button>
+</form>
+{% endmacro %}

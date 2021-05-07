@@ -1,8 +1,8 @@
 {% extends "base.html" %}
+{% import "macros.html" as macros %}
 
 {% block body %}
 <title>Home</title>
-<body>
 <div style="font-family: Georgia, serif">
   <p class="display-1 text-center font-italic font-weight-bold">“</p>
   <p class="display-4 text-center font-italic font-weight-bold">{{ quote.quote_text }}</p>
@@ -10,5 +10,4 @@
   <hr>
   <p class="display-4 text-center font-italic">- {{ quote.author }}</p>
 </div>
-</body>
 {% endblock %}

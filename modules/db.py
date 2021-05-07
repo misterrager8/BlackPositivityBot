@@ -18,6 +18,10 @@ class QuoteDB:
         return db.session.query(Quote).all()
 
     @staticmethod
+    def find_by_id(id_: int):
+        return db.session.query(Quote).get(id_)
+
+    @staticmethod
     def get_all_used():
         """
         Get all used Quotes

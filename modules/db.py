@@ -9,37 +9,27 @@ class QuoteDB:
 
     @staticmethod
     def get_all():
-        """
-        Get all Quotes
+        return db.session.query(Quote)
 
-        Returns:
-            list: all Quotes
-        """
-        return db.session.query(Quote).all()
+    @staticmethod
+    def add(quote: Quote):
+        db.session.add(quote)
+        db.session.commit()
 
     @staticmethod
     def find_by_id(id_: int):
         return db.session.query(Quote).get(id_)
 
     @staticmethod
-    def get_all_used():
+    def remove(object_):
         """
-        Get all used Quotes
 
-        Returns:
-            list: used Quotes
-        """
-        return db.session.query(Quote).filter(Quote.has_been_used)
 
-    @staticmethod
-    def get_all_unused():
+        Args:
+            object_:
         """
-        Get all unused Quotes
-
-        Returns:
-            list: unused Quotes
-        """
-        return db.session.query(Quote).filter(not Quote.has_been_used)
+        db.session.delete(object_)
+        db.session.commit()
 
     @staticmethod
     def remove_all():

@@ -1,9 +1,10 @@
 import datetime
-import random
 
 import praw
+from sqlalchemy import func
 
 from modules.db import QuoteDB
+from modules.model import Quote
 
 db = QuoteDB()
 
@@ -15,8 +16,8 @@ def format_quote():
     Returns:
         str: random Quote formatted for the thread
     """
-    random_quote = random.choice(db.get_all_unused())
-    random_quote.mark_used()
+    random_quote: Quote = db.get_all().filter(Quote.has_been_used is False).order_by(func.random()).first()
+    random_quote.mark(used=True)
     return '"{}", {}'.format(random_quote.quote_text, random_quote.author)
 
 

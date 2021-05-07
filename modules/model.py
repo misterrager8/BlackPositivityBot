@@ -49,32 +49,11 @@ class Quote(db.Model):
         self.has_been_used = has_been_used
         self.date_added = date_added
 
-    def add(self):
-        """
-        Add Quote to DB
-        """
-        db.session.add(self)
-        db.session.commit()
-
     def mark(self, used: bool):
         """
         Mark Quote 'used' or 'unused'
         """
         self.has_been_used = used
-        db.session.commit()
-
-    def mark_unused(self):
-        """
-        Mark Quote 'unused'
-        """
-        self.has_been_used = False
-        db.session.commit()
-
-    def remove(self):
-        """
-        Delete Quote from DB
-        """
-        db.session.remove(self)
         db.session.commit()
 
     def __str__(self):

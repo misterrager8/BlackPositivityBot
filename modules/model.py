@@ -56,11 +56,11 @@ class Quote(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def mark_used(self):
+    def mark(self, used: bool):
         """
-        Mark Quote 'used'
+        Mark Quote 'used' or 'unused'
         """
-        self.has_been_used = True
+        self.has_been_used = used
         db.session.commit()
 
     def mark_unused(self):

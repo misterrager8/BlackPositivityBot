@@ -50,19 +50,11 @@ class QuoteDB:
         db.session.commit()
 
     @staticmethod
-    def mark_all_used():
+    def mark_all(used: bool):
         """
-        Mark all Quotes as 'used'
+        Mark all Quotes as 'used' or 'unused'
         """
-        db.session.execute("UPDATE quotes SET has_been_used = True")
-        db.session.commit()
-
-    @staticmethod
-    def mark_all_unused():
-        """
-        Mark all Quotes as 'unused'
-        """
-        db.session.execute("UPDATE quotes SET has_been_used = False")
+        db.session.execute("UPDATE quotes SET has_been_used = %s" % used)
         db.session.commit()
 
     def import_quotes(self):

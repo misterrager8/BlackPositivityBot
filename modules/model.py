@@ -77,11 +77,8 @@ class Quote(db.Model):
         db.session.remove(self)
         db.session.commit()
 
-    def to_string(self):
-        print(self.quote_text,
-              self.author,
-              self.date_added,
-              self.has_been_used)
+    def __str__(self):
+        return "%d\t\"%s\", %s" % (self.id, self.quote_text, self.author)
 
 
 class Post(db.Model):

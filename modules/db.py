@@ -61,8 +61,7 @@ class QuoteDB:
         db.session.execute("UPDATE quotes SET has_been_used = False")
         db.session.commit()
 
-    @staticmethod
-    def import_quotes():
+    def import_quotes(self):
         """
         Import multiple Quotes from csv
         """
@@ -75,9 +74,9 @@ class QuoteDB:
 
         print(str(len(imported)) + " quote(s) found.")
         for item in imported:
-            item.to_string()
+            print(str(item))
 
         answer = input("Add these quotes? ")
         if answer == "Y" or answer == "y":
             for item in imported:
-                item.add()
+                self.add(item)

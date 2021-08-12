@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block body %}
+<title>Admin</title>
+{{ macros.paragraph('Articles', class='m-3 text-center', size=2) }}
+{% for i in articles_ %}
+{{ macros.reddit_list_item(i) }}
+{% endfor %}
+
+{% endblock %}

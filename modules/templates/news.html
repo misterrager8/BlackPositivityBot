@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros with context %}
+
+{% block body %}
+<title>News</title>
+<div class="text-center m-3">
+  <div class="mb-3">{{ macros.news_icon(size=100) }}</div>
+  {% if current_user.is_authenticated %}{% call macros.link(modal_id='article_create') %}{{ macros.add_icon() }}{% endcall %}{% endif %}
+</div>
+
+{% for i in news_ %}
+{{ macros.news_list_item(i) }}
+{% endfor %}
+
+{% call macros.modal('article_create') %}{{ macros.article_create_form() }}{% endcall %}
+{% endblock %}

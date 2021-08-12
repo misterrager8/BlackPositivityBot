@@ -1,13 +1,24 @@
 {% extends "base.html" %}
-{% import "macros.html" as macros %}
+{% import "macros.html" as macros with context %}
 
 {% block body %}
 <title>Home</title>
-<div style="font-family: Georgia, serif">
-  <p class="display-1 text-center font-italic font-weight-bold">“</p>
-  <p class="display-4 text-center font-italic font-weight-bold">{{ quote.quote_text }}</p>
-  <p class="display-1 text-center font-italic font-weight-bold">”</p>
-  <hr>
-  <p class="display-4 text-center font-italic">- {{ quote.author }}</p>
+{% if qotd %}
+<div class="jumbotron text-center shadow" style="border-radius:10px">
+  {% call macros.link(href=url_for('quotes')) %}
+  <div class="text-center border-top border-bottom p-3">{{ macros.quote_icon(size=30) }}</div>
+  {{ macros.paragraph('Quote Of The Day', class='font-weight-bold m-0 mt-2') }}
+  {{ macros.paragraph(qotd.date_used.strftime('%B %-d, %Y'), class='font-italic mb-2') }}
+  {{ macros.paragraph('"%s"' % qotd.quote_text, size=3, class='mt-5') }}
+  {{ macros.paragraph('- %s' % qotd.author, size=2, class='font-italic text-muted') }}
+  {% endcall %}
 </div>
+{% endif %}
+
+<div class="text-center border-top border-bottom p-3">{% call macros.link(href=url_for('news')) %}{{ macros.news_icon(size=30) }}{% endcall %}</div>
+
+{% for i in latest %}
+{{ macros.news_list_item(i) }}
+{% endfor %}
+
 {% endblock %}

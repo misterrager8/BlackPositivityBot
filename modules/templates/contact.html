@@ -3,5 +3,8 @@
 
 {% block body %}
 <title>Contact</title>
-{{ macros.title_div('Contact') }}
+<div class="text-center m-3">
+  <div class="mb-3">{{ macros.contact_icon(size=100) }}</div>
+</div>
+{{ macros.contact_form(class='col-6 offset-3') }}
 {% endblock %}

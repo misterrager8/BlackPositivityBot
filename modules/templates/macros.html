@@ -1,60 +1,194 @@
-{% macro title_div(txt) %}
-<p class="display-4 text-center m-5">{{ txt }}</p>
+{% macro paragraph(txt, class='', size='1', color='black') %}
+<!--suppress HtmlUnknownAttribute -->
+<p class="{{ class }}" style="color:{{ color }}; font-size:{{ size }}em">{{ txt }}</p>
 {% endmacro %}
 
-{% macro search_icon() %}
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-</svg>
+{% macro link(class='', href='#', color='black', modal_id=None, newtab=false) %}
+<a href="{{ href }}"
+   class="{{ class }}"
+   style="text-decoration:none; color:{{ color }}"
+   {% if modal_id %}
+   data-toggle="modal" data-target="#{{ modal_id }}"
+   {% endif %}
+
+   {% if newtab %}
+   target="_blank"
+   {% endif %}
+>{{ caller() }}</a>
 {% endmacro %}
 
-{% macro add_icon() %}
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-</svg>
-{% endmacro %}
-
-{% macro quote_list_item(quote) %}
-<div class="list-group-item list-group-item-action border-0">
-  <p class="font-italic">{{ quote.quote_text }}</p>
-  <div class="d-flex justify-content-between">
-    <span class="font-weight-bold">{{ quote.author }}</span>
-    <small>
-      <a class="text-danger" style="text-decoration:none" href="" data-toggle="modal" data-target="#delete-{{ quote.id }}">Delete</a>
-    </small>
-  </div>
-</div>
-{{ delete_modal(quote) }}
-{% endmacro %}
-
-{% macro post_list_item(post) %}
-<div class="list-group-item list-group-item-action border-0">
-  <a style="text-decoration:none" class="text-body" href="{{ post.url }}">{{ post.title }}</a>
-</div>
-{% endmacro %}
-
-{% macro delete_modal(quote) %}
-<div class="modal" id="delete-{{ quote.id }}" role="dialog">
+{% macro modal(id, title='') %}
+<div class="modal" id="{{ id }}" role="dialog">
   <div class="modal-dialog">
-    <div class="modal-content p-1">
-      {{ title_div('Delete?') }}
-      <a href="{{ url_for('delete_quote', id_=quote.id) }}" class="btn btn-danger">Delete</a>
+    <div class="modal-content p-2">
+      {% if title %}{{ paragraph(title, class='text-center', size=3) }}{% endif %}
+      {{ caller() }}
     </div>
   </div>
 </div>
 {% endmacro %}
 
-{% macro add_quote_form() %}
-<form class="form-inline border rounded p-2 m-2 shadow-sm" action="{{ url_for('add_quote') }}" method="POST">
-  <input type="text" class="form-control mr-2 flex-grow-1" placeholder="Quote" name="quote_text" autocomplete="off">
-  <input type="text" class="form-control mr-2 flex-grow-0" placeholder="Author" name="author" autocomplete="off">
-  <button type="submit" class="btn btn-success">{{ add_icon() }}</button>
+{% macro button(txt='Submit', bg_color='orange', txt_color='white', class='') %}
+<button type="submit" class="btn w-100" style="background-color:{{ bg_color }}; color:{{ txt_color }}; ">{{ txt }}</button>
+{% endmacro %}
+
+{% macro logo_icon(size='20', color='black') %}
+<svg height="{{ size }}" viewBox="-21 -21 682 682.66669" width="{{ size }}" xmlns="http://www.w3.org/2000/svg" fill="{{ color }}">
+  <path d="m515.828125 240.851562c-13.546875-12.640624-32.121094-19.601562-52.300781-19.601562-13.199219 0-25.6875 3.964844-36.398438 10.777344-13.066406-16.457032-33.148437-27.027344-55.648437-27.027344-14.089844 0-27.242188 4.140625-38.308594 11.285156-13.082031-15.3125-32.519531-25.035156-54.191406-25.035156-20.515625 0-39.023438 8.726562-52.035157 22.652344-11.5-7.96875-25.441406-12.652344-40.464843-12.652344-39.285157 0-71.25 31.960938-71.25 71.25v50.734375c-4.832031 4.171875-9.175781 8.988281-12.871094 14.382813l-.765625 1.128906-49.351562 92.167968c-14.976563 26.453126-14.214844 54.613282 2.257812 83.679688 6.183594 11.820312 36.957031 68.476562 74.394531 100.773438 18.40625 15.886718 41.945313 24.632812 66.273438 24.632812h200.855469c78.136718 0 141.707031-63.125 141.707031-140.71875v-206.511719c0-20.300781-7.777344-38.738281-21.902344-51.917969zm-165.597656 35.925782c0-12.007813 9.53125-21.777344 21.25-21.777344s21.25 9.769531 21.25 21.777344v44.472656c0 11.71875-9.53125 21.25-21.25 21.25s-21.25-9.53125-21.25-21.25zm-92.5-14.277344c0-11.71875 9.53125-21.25 21.25-21.25s21.25 9.53125 21.25 21.25v47.609375c-8.652344-3.320313-17.894531-5.109375-27.242188-5.109375h-15.257812zm-71.25-11.25c11.71875 0 21.25 9.53125 21.25 21.25v32.5h-42.5v-32.5c0-11.71875 9.53125-21.25 21.25-21.25zm209.542969 338.75h-200.855469c-12.339844 0-24.277344-4.4375-33.617188-12.492188-25.59375-22.074218-51.5625-64.652343-62.878906-86.332031-.296875-.570312-.476563-.882812-.519531-.957031-9.246094-16.1875-7.742188-25.328125-2.316406-34.824219l48.4375-90.4375c4.707031-6.253906 12.089843-9.957031 19.964843-9.957031h108.75c7.003907 0 13.867188 2.90625 18.839844 7.964844 4.730469 4.824218 7.265625 11.054687 7.144531 17.535156-.261718 13.507812-11.472656 24.5-24.996094 24.5h-91.113281l-27.34375 52.203125 44.292969 23.195313 13.304688-25.398438h60.859374c19.78125 0 38.441407-7.632812 52.554688-21.488281 12.355469-12.140625 20-27.851563 21.953125-44.84375 7.214844 2.46875 14.949219 3.832031 22.996094 3.832031 17.828125 0 34.136719-6.597656 46.644531-17.457031 12.683594 10.871093 29.132812 17.457031 47.105469 17.457031 7.855469 0 15.414062-1.269531 22.5-3.59375v110.375c0 50.019531-41.140625 90.71875-91.707031 90.71875zm69.207031-247.5c-12.40625 0-22.5-10.09375-22.5-22.5v-25.539062c0-10.953126 8.890625-23.210938 20.796875-23.210938 11.699218 0 24.203125 5.65625 24.203125 21.519531v27.230469c0 12.40625-10.09375 22.5-22.5 22.5zm-120-231.25h-50v-111.25h50zm-179.28125 24.6875-27.5-112.5 48.5625-11.875 27.5 112.5zm-93.199219 64.433594-72.5-70.917969 34.964844-35.742187 72.5 70.917968zm403.078125-64.6875-48.691406-11.367188 26.25-112.5 48.691406 11.367188zm164.382813-6.230469-72.5 70.917969-34.960938-35.742188 72.5-70.917968zm0 0"/>
+</svg>
+{% endmacro %}
+
+{% macro quote_icon(size='20', color='black') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-chat-square-quote" viewBox="0 0 16 16">
+  <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path d="M7.066 4.76A1.665 1.665 0 0 0 4 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112zm4 0A1.665 1.665 0 0 0 8 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112z"/>
+</svg>
+{% endmacro %}
+
+{% macro news_icon(size='20', color='black') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-newspaper" viewBox="0 0 16 16">
+  <path d="M0 2.5A1.5 1.5 0 0 1 1.5 1h11A1.5 1.5 0 0 1 14 2.5v10.528c0 .3-.05.654-.238.972h.738a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 1 1 0v9a1.5 1.5 0 0 1-1.5 1.5H1.497A1.497 1.497 0 0 1 0 13.5v-11zM12 14c.37 0 .654-.211.853-.441.092-.106.147-.279.147-.531V2.5a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v11c0 .278.223.5.497.5H12z"/>
+  <path d="M2 3h10v2H2V3zm0 3h4v3H2V6zm0 4h4v1H2v-1zm0 2h4v1H2v-1zm5-6h2v1H7V6zm3 0h2v1h-2V6zM7 8h2v1H7V8zm3 0h2v1h-2V8zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1zm-3 2h2v1H7v-1zm3 0h2v1h-2v-1z"/>
+</svg>
+{% endmacro %}
+
+{% macro contact_icon(size='20', color='black') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-mailbox2" viewBox="0 0 16 16">
+  <path d="M9 8.5h2.793l.853.854A.5.5 0 0 0 13 9.5h1a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5H9v1z"/>
+  <path d="M12 3H4a4 4 0 0 0-4 4v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a4 4 0 0 0-4-4zM8 7a3.99 3.99 0 0 0-1.354-3H12a3 3 0 0 1 3 3v6H8V7zm-3.415.157C4.42 7.087 4.218 7 4 7c-.218 0-.42.086-.585.157C3.164 7.264 3 7.334 3 7a1 1 0 0 1 2 0c0 .334-.164.264-.415.157z"/>
+</svg>
+{% endmacro %}
+
+{% macro search_icon(size='20', color='white') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-search" viewBox="0 0 16 16">
+  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
+{% endmacro %}
+
+{% macro add_icon(size='20', color='green') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-plus-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</svg>
+{% endmacro %}
+
+{% macro edit_icon(size='20', color='black') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+</svg>
+{% endmacro %}
+
+{% macro delete_icon(size='20', color='red') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-x-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+</svg>
+{% endmacro %}
+
+{% macro reddit_icon(size='20', color='red') %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-reddit" viewBox="0 0 16 16">
+  <path d="M6.167 8a.831.831 0 0 0-.83.83c0 .459.372.84.83.831a.831.831 0 0 0 0-1.661zm1.843 3.647c.315 0 1.403-.038 1.976-.611a.232.232 0 0 0 0-.306.213.213 0 0 0-.306 0c-.353.363-1.126.487-1.67.487-.545 0-1.308-.124-1.671-.487a.213.213 0 0 0-.306 0 .213.213 0 0 0 0 .306c.564.563 1.652.61 1.977.61zm.992-2.807c0 .458.373.83.831.83.458 0 .83-.381.83-.83a.831.831 0 0 0-1.66 0z"/>
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.828-1.165c-.315 0-.602.124-.812.325-.801-.573-1.9-.945-3.121-.993l.534-2.501 1.738.372a.83.83 0 1 0 .83-.869.83.83 0 0 0-.744.468l-1.938-.41a.203.203 0 0 0-.153.028.186.186 0 0 0-.086.134l-.592 2.788c-1.24.038-2.358.41-3.17.992-.21-.2-.496-.324-.81-.324a1.163 1.163 0 0 0-.478 2.224c-.02.115-.029.23-.029.353 0 1.795 2.091 3.256 4.669 3.256 2.577 0 4.668-1.451 4.668-3.256 0-.114-.01-.238-.029-.353.401-.181.688-.592.688-1.069 0-.65-.525-1.165-1.165-1.165z"/>
+</svg>
+{% endmacro %}
+
+{% macro admin_icon(size='20', color='white') %}
+{% if current_user.is_authenticated %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-unlock-fill" viewBox="0 0 16 16">
+  <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/>
+</svg>
+{% else %}
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ size }}" height="{{ size }}" fill="{{ color }}" class="bi bi-lock-fill" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+</svg>
+{% endif %}
+{% endmacro %}
+
+{% macro quote_list_item(quote) %}
+<div class="list-group-item list-group-item-action border-0 rounded my-2 pb-0">
+  {{ paragraph(quote.quote_text, class='font-italic font-weight-light', size='1.5') }}
+  <div class="d-flex justify-content-between">
+    {{ paragraph('- '+quote.author, class='font-weight-bold', size='1.25') }}
+    {% if current_user.is_authenticated %}
+    <div>
+      {% call link(class='mx-2', modal_id='delete_'+quote.id|string, color='red') %}{{ delete_icon() }}{% endcall %}
+      {% call link(class='mx-2', modal_id='edit_'+quote.id|string, color='gray') %}{{ edit_icon() }}{% endcall %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div>
+  {% call modal('delete_'+quote.id|string, title='Delete?') %}
+  {% call link(class='btn btn-danger', href=url_for('quote_delete', id_=quote.id)) %}Delete{% endcall %}
+  {% endcall %}
+
+  {% call modal('edit_'+quote.id|string, title='Edit') %}
+  {{ quote_update_form(quote) }}
+  {% endcall %}
+</div>
+{% endmacro %}
+
+{% macro news_list_item(article) %}
+<div class="list-group-item list-group-item-action border-0 p-3" style="border-radius:10px">
+  {% call link(href=article.url, class='text-truncate', newtab=true) %}{{ article.title }}{% endcall %}
+  {{ paragraph('%s' % article.date_posted.strftime('%B %-d, %Y %I:%M %p'), class='d-inline text-muted font-italic mx-3', size=0.8) }}
+  <p class="badge badge-dark float-right m-1" style="background-color:{{ article.get_source()[1] }}">{{ article.source }}</p>
+</div>
+{% endmacro %}
+
+{% macro reddit_list_item(article) %}
+<div class="list-group-item list-group-item-action rounded border-0 my-2">
+  {% call link(href=url_for('make_post', url_=article.url, title_=article.title, source_=article.source), class='mr-2') %}{{ reddit_icon(size='25') }}{% endcall %}
+  {% call link(href=article.url, class='text-truncate', newtab=true) %}{{ article.title }}{% endcall %}
+  <p class="my-0 mx-2 badge badge-dark" style="background-color:{{ article.get_source()[1] }}">{{ article.source }}</p>
+</div>
+{% endmacro %}
+
+{% macro quote_create_form() %}
+<form class="form-group rounded p-2" action="{{ url_for('quote_create') }}" method="POST">
+  <textarea rows="10" class="form-control my-2" placeholder="Quote" name="quote_text" autocomplete="off"></textarea>
+  <input type="text" class="form-control my-2" placeholder="Author" name="author" autocomplete="off">
+  {{ button() }}
 </form>
 {% endmacro %}
 
-{% macro search_quote_form() %}
-<form class="form-inline border rounded p-2 m-2 shadow-sm" action="{{ url_for('search_quotes') }}" method="POST">
+{% macro quote_update_form(quote) %}
+<form class="form-group rounded p-2" action="{{ url_for('quote_update', id_=quote.id) }}" method="POST">
+  <textarea rows="10" class="form-control my-2" placeholder="Quote" name="quote_text" autocomplete="off">{{ quote.quote_text }}</textarea>
+  <input type="text" class="form-control my-2" placeholder="Author" name="author" autocomplete="off" value="{{ quote.author }}">
+  {{ button() }}
+</form>
+{% endmacro %}
+
+{% macro quote_search_form() %}
+<form class="form-inline border rounded p-2 m-2 shadow-sm" action="{{ url_for('quote_search') }}" method="POST">
   <input type="text" class="form-control mr-2 flex-grow-1" placeholder="Search" name="search_term" autocomplete="off">
-  <button type="submit" class="btn btn-secondary">{{ search_icon() }}</button>
+  <button type="submit" class="btn" style="background-color:orange">{{ search_icon() }}</button>
+</form>
+{% endmacro %}
+
+{% macro article_create_form() %}
+<form class="form-group rounded p-2" action="{{ url_for('article_create') }}" method="POST">
+  <input type="text" class="form-control my-2" placeholder="URL" name="url" autocomplete="off">
+  <input type="text" class="form-control my-2" placeholder="Title" name="title" autocomplete="off">
+  <input type="text" class="form-control my-2" placeholder="Source" name="source" autocomplete="off">
+  {{ button() }}
+</form>
+{% endmacro %}
+
+{% macro login_form(class='') %}
+<form action="{{ url_for('login') }}" method="POST" class="form-group">
+  <input type="text" placeholder="Username" name="username" autocomplete="off" class="form-control mb-2">
+  <input type="password" placeholder="Password" name="password" autocomplete="off" class="form-control mb-2">
+  {{ button() }}
+</form>
+{% endmacro %}
+
+{% macro contact_form(class='') %}
+<form action="#" method="POST" class="form-group {{ class }}">
+  <input type="text" placeholder="Name" name="name" autocomplete="off" class="form-control mb-2">
+  <textarea rows="10" placeholder="Message" name="message" autocomplete="off" class="form-control mb-2"></textarea>
+  {{ button() }}
 </form>
 {% endmacro %}

@@ -1,47 +1,43 @@
 <!DOCTYPE html>
+{% import "macros.html" as macros with context %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="static/favicon.svg" type="image/x-icon"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
-  <script crossorigin="anonymous"
-          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-          src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script crossorigin="anonymous"
-          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-          src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
+  <script crossorigin="anonymous" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script crossorigin="anonymous" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-  <a class="navbar-brand" href="{{ url_for('index') }}">
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chat-square-quote"
-         viewBox="0 0 16 16">
-      <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
-      <path d="M7.066 4.76A1.665 1.665 0 0 0 4 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112zm4 0A1.665 1.665 0 0 0 8 5.668a1.667 1.667 0 0 0 2.561 1.406c-.131.389-.375.804-.777 1.22a.417.417 0 1 0 .6.58c1.486-1.54 1.293-3.214.682-4.112z"/>
-    </svg>
-  </a>
+<nav class="navbar navbar-expand-xl navbar-dark" style="background-color:#cf5e13">
+  <a class="navbar-brand" href="{{ url_for('index') }}">{{ macros.logo_icon(size='25', color='white') }}</a>
   <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#nav-contents">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="nav-contents">
     <ul class="navbar-nav">
-      <li class="navbar-item">
-        <a class="nav-link" href="{{ url_for('quotes') }}">Quotes</a>
-      </li>
-      <li class="navbar-item">
-        <a class="nav-link" href="{{ url_for('posts') }}">Posts</a>
-      </li>
-      <li class="navbar-item">
-        <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
-      </li>
+      <li class="navbar-item"><a class="nav-link" href="{{ url_for('quotes') }}">Quotes</a></li>
+      <li class="navbar-item"><a class="nav-link" href="{{ url_for('news') }}">News</a></li>
+      <li class="navbar-item"><a class="nav-link" href="{{ url_for('contact') }}">Contact</a></li>
+      {% if current_user.is_authenticated %}
+      <li class="navbar-item"><a class="nav-link" href="{{ url_for('admin') }}">Admin</a></li>
+      {% endif %}
     </ul>
+    <div class="ml-auto">
+      {% if current_user.is_authenticated %}
+      {% call macros.link(href=url_for('logout')) %}{{ macros.admin_icon(size=25) }}{% endcall %}
+      {% else %}
+      {% call macros.link(modal_id='login') %}{{ macros.admin_icon(size=25) }}{% endcall %}
+      {% endif %}
+    </div>
   </div>
+  {% call macros.modal('login', title='Admin') %}{{ macros.login_form() }}{% endcall %}
 </nav>
-<div class="container">
+<div class="container mb-5">
   {% block body %}
   {% endblock %}
 </div>
+<a class="nav-link" href="http://www.reddit.com/r/GoodBlackNews/new/" target="_blank">{{ macros.reddit_icon(size=25) }}</a>
 </body>
 </html>
